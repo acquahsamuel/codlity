@@ -1,0 +1,23 @@
+<div>
+  <div class="row">
+    <div class="col-md-8">
+      <textarea name="code" id="code-screen"></textarea>
+    </div>
+  </div>
+</div>
+
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/codemirror.min.js"
+></script>
+<script
+  src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.25.0/mode/javascript/javascript.min.js"
+></script>
+
+<script>
+  var editor = CodeMirror.fromTextArea(document.getElementById("code-screen"), {
+  lineNumbers: true, theme: "monokai" });
+
+</script>
+
+<script src="/plugins/ot/ot.js"></script>
+<script src="/socket.io/socket.io.js"></script>
