@@ -1,7 +1,6 @@
 const express = require("express");
-const { Passport } = require("passport");
-const router = express.Router();
 const passport = require("passport");
+const router = express.Router();
 
 router
   .route("/login")
@@ -60,7 +59,7 @@ router.get("/logout", function (req, res) {
 
 router.get(
   "/auth/facebook",
-  Passport.authenticate("facebook", { scope: "email" })
+  passport.authenticate("facebook", { scope: "email" })
 );
 
 router.get('/auth/facebok/callback', passport.authenticate('facebook', {
