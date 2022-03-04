@@ -1,26 +1,26 @@
-const express = require("express");
-const path = require("path");
-const favicon = require("serve-favicon");
-const logger = require("morgan");
-const mongoose = require("mongoose");
-const passport = require("passport");
-const session = require("express-session");
-const expressValidator = require("express-validator");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
+var express = require("express");
+var path = require("path");
+var logger = require("morgan");
+var cookieParser = require("cookie-parser");
+var bodyParser = require("body-parser");
+var expressValidator = require("express-validator");
 
-const config = require("./config");
+var mongoose = require("mongoose");
+var passport = require("passport");
+var session = require("express-session");
+
 require("./passport");
+var config = require("./config");
 
-const indexRoute = require("./routes/index");
-const authRoute = require("./routes/auth");
-const taskRoute = require("./routes/task");
+var indexRoute = require("./routes/index");
+var authRoute = require("./routes/auth");
+var taskRoute = require("./routes/task");
 
 mongoose.connect(config.dbConnstring);
-global.User = require("./models/User");
-global.Task = require("./models/Task");
+global.User = require("./models/user");
+global.Task = require("./models/task");
 
-const app = express();
+var app = express();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -31,8 +31,9 @@ app.set("view engine", "hbs");
 app.use(logger("dev"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
 app.use(expressValidator());
+
+app.use(cookieParser());
 app.use(
   session({
     secret: config.sessionKey,
@@ -40,11 +41,12 @@ app.use(
     saveUninitialized: true
   })
 );
+
 app.use(passport.initialize());
 app.use(passport.session());
+
 app.use(express.static(path.join(__dirname, "public")));
 
-//initailize session - Get authenticated user
 app.use(function (req, res, next) {
   if (req.isAuthenticated()) {
     res.locals.user = req.user;
@@ -58,7 +60,7 @@ app.use("/", taskRoute);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  const err = new Error("Not Found");
+  var err = new Error("Not Found");
   err.status = 404;
   next(err);
 });
