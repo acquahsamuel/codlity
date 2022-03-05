@@ -1,11 +1,11 @@
-const express = require("express");
-const passport = require("passport");
-const router = express.Router();
+var express = require("express");
+var router = express.Router();
+var passport = require("passport");
 
 router
   .route("/login")
   .get(function (req, res, next) {
-    res.render("login", { title: "Login you account" });
+    res.render("login", { title: "Login your account" });
   })
   .post(
     passport.authenticate("local", {
@@ -23,14 +23,14 @@ router
   })
   .post(function (req, res, next) {
     req.checkBody("name", "Empty Name").notEmpty();
-    req.checkBody("email", "Invalid Email").notEmpty();
+    req.checkBody("email", "Invalid Email").isEmail();
     req.checkBody("password", "Empty Password").notEmpty();
     req
       .checkBody("password", "Password do not match")
       .equals(req.body.confirmPassword)
       .notEmpty();
 
-    let errors = req.validationErrors();
+    var errors = req.validationErrors();
     if (errors) {
       res.render("register", {
         name: req.body.name,
@@ -38,10 +38,10 @@ router
         errorMessages: errors
       });
     } else {
-      let user = new User();
-      (user.name = req.body.name), (user.email = req.body.email);
+      var user = new User();
+      user.name = req.body.name;
+      user.email = req.body.email;
       user.setPassword(req.body.password);
-
       user.save(function (err) {
         if (err) {
           res.render("register", { errorMessages: err });
@@ -62,9 +62,12 @@ router.get(
   passport.authenticate("facebook", { scope: "email" })
 );
 
-router.get('/auth/facebok/callback', passport.authenticate('facebook', {
-    successRedirect : '/',
-    failureRedirect : '/'
-}))
+router.get(
+  "/auth/facebook/callback",
+  passport.authenticate("facebook", {
+    successRedirect: "/",
+    failureRedirect: "/"
+  })
+);
 
 module.exports = router;

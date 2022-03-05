@@ -1,6 +1,6 @@
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const FacebookStrategy = require("passport-facebook").Strategy;
+var passport = require("passport");
+var LocalStrategy = require("passport-local").Strategy;
+var FacebookStrategy = require("passport-facebook").Strategy;
 
 passport.serializeUser(function (user, done) {
   done(null, user._id);
@@ -30,19 +30,20 @@ passport.use(
             message: "Incorrect username or password"
           });
         }
+
         return done(null, user);
       });
     }
   )
 );
 
-//faceook auth
 passport.use(
   new FacebookStrategy(
     {
-      clientID: process.env.FACEBOOK_APP_ID,
-      clientSecret: process.env.FACEBOOK_APP_SECRET,
-      callbackURL: "http://localhost:3000/auth/facebook/callback",
+      clientID: "612822675590167",
+      clientSecret: "dcb63fc3264a53bc54496cad1ab51da6",
+      callbackURL:
+        "https://salty-bayou-80249.herokuapp.com/auth/facebook/callback",
       profileFields: ["id", "displayName", "email"]
     },
     function (token, refreshToken, profile, done) {
@@ -66,7 +67,7 @@ passport.use(
                 });
               }
 
-              user = new User();
+              var user = new User();
               user.name = profile.displayName;
               user.email = profile.emails[0].value;
               user.facebookId = profile.idea;
